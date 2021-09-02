@@ -5,6 +5,7 @@ import (
 	"chatoverchaiadmin/storage"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/contrib/static"
@@ -250,5 +251,12 @@ func main() {
 		}
 		c.HTML(http.StatusOK, "admin11.html", Options)
 	})
-	r.Run(":8080")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "9000" // Default port if not specified
+	}
+	err := r.Run(":" + port)
+	if err != nil {
+		panic(err)
+	}
 }

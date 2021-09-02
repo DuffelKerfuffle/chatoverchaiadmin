@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        
+        <a href="http://localhost:8080/home1">home</a>
+        <script src = "/js/adminvue1.js"></script>
+        <form action = "/change1" method = "post" name = "change" id = "change" enctype="multipart/form-data">
+            <div id = "change">
+                <p>Which post would you like to change</p>
+                <select id="choicechange" name="option" onchange = "showchange()">
+                    
+                    <option value="blog">blog</option>
+                    
+                    <option value="poetry">poetry</option>
+                    
+                    <option value="previous">previous</option>
+                    
+                    <option value="upcoming">upcoming</option>
+                    
+                    <option value="photo">photos</option>
+                   
+                    <option value="videos">videos</option>
+                    
+                </select>
+                <select id = "docschange" name = "changename" onchange = "text()">
+            
+                </select><br>
+                <p>What is the new name of your post</p>
+                <input type = "text" id = "changename1" name = "newname"><br>
+                <p>Type in the new contents of your post.</p>
+                <textarea id="fname" name = "newmessage" rows="35" cols="50"></textarea><br><br>
+                <p>Type the new google drive link of the image you want to add to the post</p>
+                <input type = "text" id = "changename2" name = "newlink"><br>
+                <p>If you do not want to change a field, leave it as it is.</p>
+            </div>
+            <p hidden id = "thingchange" name = "thingchange1"></p>
+            <input type="submit" value="Submit">
+        </form>
+       
+        [[ range $key, $value := . ]]
+            <p hidden id = "[[ $key ]]">[[ $value.Docs ]]</p>       
+            <div id = "[[ $key ]]1">
+                [[ range $value.Docs ]]
+                    <p hidden id = "hi">[[ .Title ]]</p>
+                [[ end ]]
+            </div>
+            
+            <div>
+                [[ range $value.Docs ]]
+                    <p hidden id = "[[ .Title ]]">[[ .Text ]]</p>
+                [[ end ]]
+            </div>
+            
+            <div>
+                [[ range $value.Docs ]]
+                    <img id = "[[ .Title ]]1" src = "/images/[[ .MediaSrc ]].png" hidden>
+                [[ end ]]
+            </div>
+        [[ end ]]
+    </body>
+</html>

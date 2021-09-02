@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        
+        <a href="http://localhost:8080/admin/ui2">home</a>
+        <script src = "/js/adminvue.js"></script>
+        <form action = "/admin/change" method = "post" name = "change" id = "change" enctype="multipart/form-data">
+            <div id = "change">
+                <select id="choicechange" name="option" onchange = "showchange()">
+                    
+                    <option value="blog">blog</option>
+                    
+                    <option value="poetry">poetry</option>
+                    
+                    <option value="previous">previous</option>
+                    
+                    <option value="upcoming">upcoming</option>
+                    
+                    <option value="photo">photos</option>
+                   
+                    <option value="videos">videos</option>
+                    
+                </select>
+                <select id = "docschange" name = "changename" onchange = "text()">
+            
+                </select><br>
+                <input type = "text" id = "changename1" name = "newname"><br>
+                <textarea id="fname" name = "newmessage" rows="35" cols="50"></textarea><br><br>
+                <p>Canvas to fill:</p>
+                <canvas id="myCanvas" width="250" height="300" style="border:0px solid #d3d3d3;">Your browser does not support the HTML canvas tag.</canvas>
+                <input type = "file" id = "img1" name = "changeimg" /><br>
+            </div>
+            <p hidden id = "thingchange" name = "thingchange1"></p>
+            <input type="submit" value="Submit">
+        </form>
+       
+        <!--[[ range $key, $value := . ]]
+            <p hidden id = "[[ $key ]]">[[ $value.Docs ]]</p>       
+            <div id = "[[ $key ]]1">
+                [[ range $value.Docs ]]
+                    <p hidden id = "hi">[[ .Title ]]</p>
+                [[ end ]]
+            </div>
+            
+            <div>
+                [[ range $value.Docs ]]
+                    <p hidden id = "[[ .Title ]]">[[ .Text ]]</p>
+                [[ end ]]
+            </div>
+            
+            <div>
+                [[ range $value.Docs ]]
+                    <img id = "[[ .Title ]]1" src = "/images/[[ .MediaSrc ]].png" hidden>
+                [[ end ]]
+            </div>
+        [[ end ]]--> 
+    </body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <body onload = "show1()">
+    
+    <script src = "/js/vue.js"></script>
+    <script src = "/js/adminvue.js"></script>
+    <form action = "/admin/newui" method="post" name = "modify">
+    
+        <select id="action" name = "category" onchange = "change()">
+            <option value ="remove">remove</option>
+            <option value ="add">add</option>
+            <option value ="change">change</option>
+        </select><br>
+    
+        <div id = "remove">
+            <select id="choice" name="option" onchange = "show1()">
+                    
+                <option value="blog">blog</option>
+            
+                <option value="poetry">poetry</option>
+            
+                <option value="previous">previous</option>
+            
+                <option value="upcoming">upcoming</option>
+        
+                <option value="photo">photos</option>
+            
+            </select>
+            <select id = "docsremove" name = "docremove" onchange = "text()">
+        
+            </select><br>
+        </div>     
+        
+        <div id = "change">
+            <select id="choicechange" name="optionchange" onchange = "show1()">
+                
+                <option value="blog">blog</option>
+                
+                <option value="poetry">poetry</option>
+                
+                <option value="previous">previous</option>
+                
+                <option value="upcoming">upcoming</option>
+                
+                <option value="photo">photos</option>
+                
+            </select>
+            <select id = "docschange" name = "docchange" onchange = "text()">
+        
+            </select><br>
+            <input type = "text" name = "newtitle">
+            <textarea id="fname" name = "text" rows="35" cols="50"></textarea><br>
+            <input type = "file" id = "img1" name = "changeimg" /><br>
+        </div>
+        
+        <div id = "append">
+            <input type="text" id="hi" name="name"><br>
+            <textarea id="new" name = "add" rows="35" cols="50"></textarea><br>
+            
+            <input type = "file" id = "img1" name = "mediasrc" /><br>
+
+            <select id="choiceadd" name="optionadd" onchange = "show1()">
+                    
+                <option value="blog">blog</option>
+            
+                <option value="poetry">poetry</option>
+            
+                <option value="previous">previous</option>
+            
+                <option value="upcoming">upcoming</option>
+        
+                <option value="photo">photos</option>
+            
+            </select>
+        </div>
+        
+        [[ range $key, $value := . ]]
+            <p hidden id = "[[ $key ]]">[[ $value.Docs ]]</p>       
+            <div id = "[[ $key ]]1">
+                [[ range $value.Docs ]]
+                    <p hidden id = "hi">[[ .Title ]]</p>
+                [[ end ]]
+            </div>
+            <div>
+                [[ range $value.Docs ]]
+                    <p hidden id = "[[ .Title ]]">[[ .Text ]]</p>
+                [[ end ]]
+            </div>
+        [[ end ]]
+
+        <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>  

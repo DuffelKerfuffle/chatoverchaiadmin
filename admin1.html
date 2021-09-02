@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <body> 
+        
+        <a href="http://localhost:8080/admin/ui2">home</a>
+        <form action = "/admin/add" method = "post" name = "append" id = "append" enctype="multipart/form-data">
+            
+
+            <input type="text" id="hi" name="name"><br>
+
+            <p>Type in the contents of your post</p>
+            <textarea id="new" name = "message" rows="35" cols="50"></textarea><br>
+
+            
+            <input type = "file" id = "img1" name = "mediasrc" /><br>
+    
+            <select id="choiceadd" name="optionadd">
+                    
+                <option value="blog">blog</option>
+            
+                <option value="poetry">poetry</option>
+            
+                <option value="previous">previous</option>
+            
+                <option value="upcoming">upcoming</option>
+        
+                <option value="photo">photos</option>
+                
+                <option value="videos">videos</option>
+            
+            </select>
+            
+            <input type="submit" value="Submit">
+        </form>              
+        <!--[[ range $key, $value := . ]]
+        <p hidden id = "[[ $key ]]">[[ $value.Docs ]]</p>       
+        <div id = "[[ $key ]]1">
+            [[ range $value.Docs ]]
+            <p hidden id = "hi">[[ .Title ]]</p>
+            [[ end ]]
+        </div>
+        <div>
+            [[ range $value.Docs ]]
+            <p hidden id = "[[ .Title ]]">[[ .Text ]]</p>
+            [[ end ]]
+        </div>
+        [[ end ]]-->
+    </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        
+        <a href="http://localhost:8080/home1">home</a>
+        <script src = "/js/adminvue.js"></script>
+        <form action = "/remove1" method = "post" name = "remove" id = "remove">
+            <p>what is the category of the post you would like to remove?</p>
+            <div id = "remove">
+                <select id="choice" name="option" onchange = "showremove()">
+                        
+                    <option value="blog">blog</option>
+                
+                    <option value="poetry">poetry</option>
+                
+                    <option value="previous">previous</option>
+                
+                    <option value="upcoming">upcoming</option>
+            
+                    <option value="photo">photos</option>
+                    
+                    <option value="videos">videos</option>
+                
+                </select>
+                
+                <p>what is the specific post you would like to remove?</p>
+                <select id = "docsremove" name = "removename" onchange = "text()">
+            
+                </select><br>
+            </div>     
+            <p hidden id = "thingremove" name = "thingremove1"></p>
+            <input type="submit" value="Submit">
+        </form>
+
+        
+        [[ range $key, $value := . ]]
+        <p hidden id = "[[ $key ]]">[[ $value.Docs ]]</p>       
+        <div id = "[[ $key ]]1">
+            [[ range $value.Docs ]]
+            <p hidden id = "hi">[[ .Title ]]</p>
+            [[ end ]]
+        </div>
+        <div>
+            [[ range $value.Docs ]]
+            <p hidden id = "[[ .Title ]]">[[ .Text ]]</p>
+            [[ end ]]
+        </div>
+
+        
+        [[ end ]]
+    </body>
+</html>

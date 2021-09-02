@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <script src="./js/adminvue2.js"></script>
+    <body>
+        <p>login here</p>
+        <form action = "/login1" method = "post" name = "login" id = "login" enctype="multipart/form-data">
+            <p> Please enter your username here</p><br>
+            <input type = "text" name = "username" id = "username"><br>
+            <p> Please enter your password here</p><br>
+            <input type = "password" name = "password" id = "password"><br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <div hidden> 
+            [[ range . ]]
+                <p hidden id = "fromotherpage">[[ . ]]</p>
+            [[ end ]]
+        </div>
+    </body>
+</html>  

@@ -185,7 +185,9 @@ func main() {
 	r.GET("/remove1", func(c *gin.Context) {
 		c.HTML(http.StatusOK, removeurl, Options)
 	})
-
+	r.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/home1")
+	})
 	r.POST("/remove1", func(c *gin.Context) {
 		contentname := c.PostForm("removename")
 		option := c.PostForm("option")

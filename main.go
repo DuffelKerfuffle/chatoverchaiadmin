@@ -25,9 +25,9 @@ type sourceinterface interface {
 }*/
 
 type manager interface {
-	Add(title, text, imgSrc string) bool
+	Add(title, text string) bool
 	Remove(title string) bool
-	Change(title, newtitle, newText, newimg string) bool
+	Change(title, newtitle, newText string) bool
 	GetAllDocs() []documents.Doc
 }
 
@@ -194,6 +194,7 @@ func main() {
 
 		for k := range Options {
 			if option == k {
+
 				ddoc := Options[option]
 
 				ddoc.Remove(contentname)
@@ -214,15 +215,19 @@ func main() {
 		option := c.PostForm("option")
 		for k := range Options {
 			if option == k {
-				if option != "videos" {
+				if option == "photo" {
 					newlink = strings.Replace(newlink, "https://drive.google.com/file/d/", "https://drive.google.com/thumbnail?id=", -1)
 					newlink = strings.Replace(newlink, "/view?usp=sharing", "", -1)
-				} else {
+				} else if option == "videos" {
 					newlink = strings.Replace(newlink, "/view?usp=sharing", "/preview", -1)
 				}
 				ddoc := GetDdoc(option, Options)
 
-				ddoc.Change(contentname, newname, newtext, newlink)
+				if option == "videos" || option == "photo" {
+					ddoc.Change(contentname, newname, newlink)
+				} else {
+					ddoc.Change(contentname, newname, newtext)
+				}
 				storage.Store(ddoc, option)
 				break
 			}
@@ -234,18 +239,20 @@ func main() {
 		PostContent := c.PostForm("message")
 		msrc := c.PostForm("msrc")
 		option := c.PostForm("optionadd")
-		fmt.Println(contentname, PostContent, msrc, option)
-		fmt.Println(msrc)
 		for k := range Options {
 			if option == k {
-				if option != "videos" {
+				if option == "photo" {
 					msrc = strings.Replace(msrc, "https://drive.google.com/file/d/", "https://drive.google.com/thumbnail?id=", -1)
 					msrc = strings.Replace(msrc, "/view?usp=sharing", "", -1)
-				} else {
+				} else if option == "videos" {
 					msrc = strings.Replace(msrc, "/view?usp=sharing", "/preview", -1)
 				}
 				ddoc := GetDdoc(option, Options)
-				ddoc.Add(contentname, PostContent, msrc)
+				if option == "videos" || option == "photo" {
+					ddoc.Add(contentname, msrc)
+				} else {
+					ddoc.Add(contentname, PostContent)
+				}
 				fmt.Println(ddoc)
 				storage.Store(ddoc, option)
 				break

@@ -32,6 +32,7 @@ function text(){
 
   if(document.getElementById("docschange") == null){
     document.getElementById("changename1").innerHTML = "";
+    document.getElementById("fname").innerHTML = "";
   }else {
     document.getElementById("changename1").value = document.getElementById("docschange").value;
   }

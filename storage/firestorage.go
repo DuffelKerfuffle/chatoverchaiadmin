@@ -13,7 +13,7 @@ import (
 
 //Adder allows both mediamanagers and documentmanagers to add
 type Adder interface {
-	Add(title, text, imgSrc string) bool
+	Add(title, text string) bool
 }
 
 // Getter gets the documents
@@ -74,7 +74,7 @@ func Load(a Adder, c string) {
 		if err != nil {
 			panic(err)
 		}
-		a.Add(doc.Data()["Title"].(string), doc.Data()["Text"].(string), doc.Data()["MediaSrc"].(string))
+		a.Add(doc.Data()["Title"].(string), doc.Data()["Text"].(string))
 	}
 }
 

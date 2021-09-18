@@ -27,9 +27,9 @@
                 </select><br>
                 <p>What is the new name of your post</p>
                 <input type = "text" id = "changename1" name = "newname"><br>
-                <p>Type in the new contents of your post.</p>
+                <p>Type in the new contents of your post(only if you aren't changing a post from the photos/videos sections)</p>
                 <textarea id="fname" name = "newmessage" rows="35" cols="50"></textarea><br><br>
-                <p>Type the new google drive link of the image you want to add to the post</p>
+                <p>Type the new google drive link of the image/video you want to add to the post<br> This only applies if you are changing a post from the photos or videos sections</p>
                 <input type = "text" id = "changename2" name = "newlink"><br>
                 <p>If you do not want to change a field, leave it as it is.</p>
             </div>
@@ -48,12 +48,6 @@
             <div>
                 [[ range $value.Docs ]]
                     <p hidden id = "[[ .Title ]]">[[ .Text ]]</p>
-                [[ end ]]
-            </div>
-            
-            <div>
-                [[ range $value.Docs ]]
-                    <img id = "[[ .Title ]]1" src = "/images/[[ .MediaSrc ]].png" hidden>
                 [[ end ]]
             </div>
         [[ end ]]

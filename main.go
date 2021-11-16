@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/contrib/static"
@@ -142,10 +141,8 @@ func main() {
 	changeurl := "admin33.html"
 	loginurl := "login.html"
 
-	logins := 1
-	authenticated := false
 	gin.SetMode(gin.ReleaseMode)
-
+	var authorised []string
 	r := gin.Default()
 	r.Delims("[[", "]]")
 	r.LoadHTMLFiles("admin2.html", "newadmin.html", "adminui.html", "admin11.html", "admin33.html", "login.html")
@@ -153,7 +150,14 @@ func main() {
 	r.Use(static.Serve("/js", static.LocalFile("./js", true)))
 
 	r.GET("/login1", func(c *gin.Context) {
-		if authenticated {
+		auth := false
+		for _, v := range authorised {
+			if c.ClientIP() == v {
+				auth = true
+			}
+		}
+		fmt.Println("authorised")
+		if auth {
 			c.Redirect(http.StatusMovedPermanently, "/home1")
 		} else {
 			c.HTML(http.StatusOK, loginurl, nil)
@@ -161,26 +165,42 @@ func main() {
 	})
 
 	r.POST("/login1", func(c *gin.Context) {
-		UserInputcookie, err := c.Cookie("cookie" + strconv.Itoa(logins))
+		UserInputcookie, err := c.Cookie("cookie")
 
 		if err != nil {
 			UserInputcookie = "NotSet"
-			c.SetCookie("cookie"+strconv.Itoa(logins), c.PostForm("username"), 3600, "/", "localhost", false, true)
+			c.SetCookie("cookie", c.PostForm("username"), 3600, "/", "localhost", false, true)
 		}
-		PasswordInputcookie, err := c.Cookie("passcookie" + strconv.Itoa(logins))
+		PasswordInputcookie, err := c.Cookie("passcookie")
 
 		if err != nil {
 			PasswordInputcookie = "NotSet"
-			c.SetCookie("passcookie"+strconv.Itoa(logins), c.PostForm("password"), 3600, "/", "localhost", false, true)
+			c.SetCookie("passcookie", c.PostForm("password"), 3600, "/", "localhost", false, true)
 		}
 		if UserInputcookie == username && PasswordInputcookie == password {
-			authenticated = true
+			canappend := true
+			for _, v := range authorised {
+				if c.ClientIP() == v {
+					canappend = false
+				}
+			}
+			if canappend {
+				fmt.Println("appended")
+				authorised = append(authorised, c.ClientIP())
+			}
 		}
 		c.HTML(http.StatusOK, homeurl, nil)
 	})
 
 	r.GET("/home1", func(c *gin.Context) {
-		if authenticated {
+		auth := false
+		for _, v := range authorised {
+			if c.ClientIP() == v {
+				auth = true
+			}
+		}
+		fmt.Println(authorised)
+		if auth {
 			c.HTML(http.StatusOK, homeurl, Options)
 		} else {
 			c.HTML(403, loginurl, Options)
@@ -188,7 +208,14 @@ func main() {
 	})
 
 	r.GET("/add1", func(c *gin.Context) {
-		if authenticated {
+		auth := false
+		for _, v := range authorised {
+			if c.ClientIP() == v {
+				auth = true
+			}
+		}
+		fmt.Println(authorised)
+		if auth {
 			c.HTML(http.StatusOK, addurl, Options)
 		} else {
 			c.HTML(403, loginurl, Options)
@@ -196,7 +223,14 @@ func main() {
 	})
 
 	r.GET("/change1", func(c *gin.Context) {
-		if authenticated {
+		auth := false
+		for _, v := range authorised {
+			if c.ClientIP() == v {
+				auth = true
+			}
+		}
+		fmt.Println(authorised)
+		if auth {
 			c.HTML(http.StatusOK, changeurl, Options)
 		} else {
 			c.HTML(403, loginurl, Options)
@@ -204,7 +238,14 @@ func main() {
 	})
 
 	r.GET("/remove1", func(c *gin.Context) {
-		if authenticated {
+		auth := false
+		for _, v := range authorised {
+			if c.ClientIP() == v {
+				auth = true
+			}
+		}
+		fmt.Println(authorised)
+		if auth {
 			c.HTML(http.StatusOK, removeurl, Options)
 		} else {
 			c.HTML(403, loginurl, Options)

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/contrib/static"
@@ -135,13 +136,14 @@ func main() {
 	username := "ChatOverChai"
 	password := "ChatUnderChai@321"
 
-	homeurl := "login.html"
-	addurl := "login.html"
-	removeurl := "login.html"
-	changeurl := "login.html"
+	homeurl := "adminui.html"
+	addurl := "admin11.html"
+	removeurl := "admin2.html"
+	changeurl := "admin33.html"
 	loginurl := "login.html"
 
-	//authenticated := false
+	logins := 1
+	authenticated := false
 	gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
@@ -150,41 +152,65 @@ func main() {
 	r.Use(static.Serve("/images", static.LocalFile("../chatoverchai/images", true)))
 	r.Use(static.Serve("/js", static.LocalFile("./js", true)))
 
-	r.POST("/login1", func(c *gin.Context) {
-		Usernameinput := c.PostForm("username")
-		Passwordinput := c.PostForm("password")
-		fmt.Println(Usernameinput)
-		if Usernameinput == username && Passwordinput == password {
-			//authenticated = true
-			homeurl = "adminui.html"
-			addurl = "admin11.html"
-			removeurl = "admin2.html"
-			changeurl = "admin33.html"
-			loginurl = "adminui.html"
-			fmt.Println("correct!!!")
+	r.GET("/login1", func(c *gin.Context) {
+		if authenticated {
+			c.Redirect(http.StatusMovedPermanently, "/home1")
+		} else {
+			c.HTML(http.StatusOK, loginurl, nil)
 		}
-		c.HTML(http.StatusOK, loginurl, nil)
 	})
 
-	r.GET("/login1", func(c *gin.Context) {
-		c.HTML(http.StatusOK, loginurl, nil)
+	r.POST("/login1", func(c *gin.Context) {
+		UserInputcookie, err := c.Cookie("cookie" + strconv.Itoa(logins))
+
+		if err != nil {
+			UserInputcookie = "NotSet"
+			c.SetCookie("cookie"+strconv.Itoa(logins), c.PostForm("username"), 3600, "/", "localhost", false, true)
+		}
+		PasswordInputcookie, err := c.Cookie("passcookie" + strconv.Itoa(logins))
+
+		if err != nil {
+			PasswordInputcookie = "NotSet"
+			c.SetCookie("passcookie"+strconv.Itoa(logins), c.PostForm("password"), 3600, "/", "localhost", false, true)
+		}
+		if UserInputcookie == username && PasswordInputcookie == password {
+			authenticated = true
+		}
+		c.HTML(http.StatusOK, homeurl, nil)
 	})
 
 	r.GET("/home1", func(c *gin.Context) {
-		c.HTML(http.StatusOK, homeurl, Options)
+		if authenticated {
+			c.HTML(http.StatusOK, homeurl, Options)
+		} else {
+			c.HTML(403, loginurl, Options)
+		}
 	})
 
 	r.GET("/add1", func(c *gin.Context) {
-		c.HTML(http.StatusOK, addurl, Options)
+		if authenticated {
+			c.HTML(http.StatusOK, addurl, Options)
+		} else {
+			c.HTML(403, loginurl, Options)
+		}
 	})
 
 	r.GET("/change1", func(c *gin.Context) {
-		c.HTML(http.StatusOK, changeurl, Options)
+		if authenticated {
+			c.HTML(http.StatusOK, changeurl, Options)
+		} else {
+			c.HTML(403, loginurl, Options)
+		}
 	})
 
 	r.GET("/remove1", func(c *gin.Context) {
-		c.HTML(http.StatusOK, removeurl, Options)
+		if authenticated {
+			c.HTML(http.StatusOK, removeurl, Options)
+		} else {
+			c.HTML(403, loginurl, Options)
+		}
 	})
+
 	r.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/home1")
 	})

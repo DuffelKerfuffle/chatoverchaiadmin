@@ -12,18 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-/*type image struct {
-	pic imageupload.Image
-}
-
-type source struct {
-	otherpage bool
-}
-
-type sourceinterface interface {
-	Hi(bool)
-}*/
-
 type manager interface {
 	Add(title, text string) bool
 	Remove(title string) bool
@@ -31,74 +19,10 @@ type manager interface {
 	GetAllDocs() []documents.Doc
 }
 
-/*
-func addImage(source, contentname, option string, c *gin.Context, y image, Options map[string]manager) manager {
-	img, err := imageupload.Process(c.Request, source)
-
-	fmt.Println("webpage recognised")
-	if err != nil {
-		log.Println(err)
-		fmt.Println("hi1")
-		vid, err := c.FormFile("source")
-		if err != nil {
-			log.Println(err)
-			fmt.Println("hi2")
-			panic(err)
-		}
-		err = c.SaveUploadedFile(vid, "../chatoverchai/images/"+contentname+".MOV")
-		if err != nil {
-			log.Println(err)
-			fmt.Println("hi3")
-			panic(err)
-		}
-		//panic(err)
-	}
-
-	thumb, err := imageupload.ThumbnailPNG(img, 300, 300)
-
-	if err != nil {
-		log.Println(err)
-		fmt.Println("hi4")
-		panic(err)
-	}
-
-	y.pic = *thumb
-	ddoc := Options[option]
-	err2 := y.pic.Save("../chatoverchai/images/" + contentname + ".png")
-	if err2 != nil {
-		log.Println(err2)
-		panic(err2)
-	}
-	return ddoc
-}
-
-
-func (s *source) Hi(hello bool) {
-	fmt.Println("hi")
-}*/
-
 func GetDdoc(option string, Options map[string]manager) manager {
 	ddoc := Options[option]
 	return ddoc
 }
-
-/*
-func addVideo(c *gin.Context, option, contentname string, Options map[string]manager) manager {
-	vid, err := c.FormFile("mediasrc")
-	if err != nil {
-		log.Println(err)
-		fmt.Println("hi2")
-		panic(err)
-	}
-	err = c.SaveUploadedFile(vid, "../chatoverchai/videos/"+contentname+".mp4")
-	if err != nil {
-		log.Println(err)
-		fmt.Println("hi3")
-		panic(err)
-	}
-	ddoc := Options[option]
-	return ddoc
-}*/
 
 func main() {
 
@@ -165,90 +89,55 @@ func main() {
 	})
 
 	r.POST("/login1", func(c *gin.Context) {
-		UserInputcookie, err := c.Cookie("cookie")
+		UserName := c.PostForm("username")
+		Password := c.PostForm("password")
+		if UserName == username && Password == password {
+			_, err := c.Cookie("auth")
 
-		if err != nil {
-			UserInputcookie = "NotSet"
-			c.SetCookie("cookie", c.PostForm("username"), 3600, "/", "localhost", false, true)
-		}
-		PasswordInputcookie, err := c.Cookie("passcookie")
-
-		if err != nil {
-			PasswordInputcookie = "NotSet"
-			c.SetCookie("passcookie", c.PostForm("password"), 3600, "/", "localhost", false, true)
-		}
-		if UserInputcookie == username && PasswordInputcookie == password {
-			canappend := true
-			for _, v := range authorised {
-				if c.ClientIP() == v {
-					canappend = false
-				}
-			}
-			if canappend {
-				fmt.Println("appended")
-				authorised = append(authorised, c.ClientIP())
+			if err != nil {
+				c.SetCookie("auth", "true", 300, "/", "localhost", false, true)
 			}
 		}
 		c.HTML(http.StatusOK, homeurl, nil)
 	})
 
 	r.GET("/home1", func(c *gin.Context) {
-		auth := false
-		for _, v := range authorised {
-			if c.ClientIP() == v {
-				auth = true
-			}
-		}
-		fmt.Println(authorised)
-		if auth {
-			c.HTML(http.StatusOK, homeurl, Options)
-		} else {
+		auth1, err := c.Cookie("auth")
+		if err != nil {
 			c.HTML(403, loginurl, Options)
+		}
+		if auth1 == "true" {
+			c.HTML(http.StatusOK, homeurl, Options)
 		}
 	})
 
 	r.GET("/add1", func(c *gin.Context) {
-		auth := false
-		for _, v := range authorised {
-			if c.ClientIP() == v {
-				auth = true
-			}
-		}
-		fmt.Println(authorised)
-		if auth {
-			c.HTML(http.StatusOK, addurl, Options)
-		} else {
+		auth1, err := c.Cookie("auth")
+		if err != nil {
 			c.HTML(403, loginurl, Options)
+		}
+		if auth1 == "true" {
+			c.HTML(http.StatusOK, addurl, Options)
 		}
 	})
 
 	r.GET("/change1", func(c *gin.Context) {
-		auth := false
-		for _, v := range authorised {
-			if c.ClientIP() == v {
-				auth = true
-			}
-		}
-		fmt.Println(authorised)
-		if auth {
-			c.HTML(http.StatusOK, changeurl, Options)
-		} else {
+		auth1, err := c.Cookie("auth")
+		if err != nil {
 			c.HTML(403, loginurl, Options)
+		}
+		if auth1 == "true" {
+			c.HTML(http.StatusOK, changeurl, Options)
 		}
 	})
 
 	r.GET("/remove1", func(c *gin.Context) {
-		auth := false
-		for _, v := range authorised {
-			if c.ClientIP() == v {
-				auth = true
-			}
-		}
-		fmt.Println(authorised)
-		if auth {
-			c.HTML(http.StatusOK, removeurl, Options)
-		} else {
+		auth1, err := c.Cookie("auth")
+		if err != nil {
 			c.HTML(403, loginurl, Options)
+		}
+		if auth1 == "true" {
+			c.HTML(http.StatusOK, removeurl, Options)
 		}
 	})
 
